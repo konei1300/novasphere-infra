@@ -1,4 +1,4 @@
-# NovaSphere — Infrastructure as Code
+# NovaSphere — Infrastructure as Code (IaC)
 ## Description
 Dépôt d'infrastructure de NovaSphere.
 Provisioning via Terraform, configuration via Ansible.
