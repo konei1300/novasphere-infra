@@ -21,3 +21,13 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+# Packer
+packer_cache/
+*.pkr.hcl.lock
+# Logs
+*.log
+# Fichiers temporaires
+*.tmp
+*.bak
+*.swp
+*~
