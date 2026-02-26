@@ -8,7 +8,7 @@ Provisioning via Terraform, configuration via Ansible.
 - **Cloud** : AWS (EC2, VPC, Security Groups)
 - **Image Building** : Packer (AMI)
 ## Structure du dépôt
-_À compléter au fil des séances._
+- `docs/` — Documentation d'architecture
 ## Auteur
 - Nom : Ibrahim KONE
 - Date de création : 2026/02/25
