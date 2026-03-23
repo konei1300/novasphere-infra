@@ -1,0 +1,75 @@
+---
+- name: Mettre à jour le cache APT
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  tags: [install]
+
+- name: Installer les paquets requis
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+  tags: [install]
+
+- name: S'assurer que Nginx est démarré et activé
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+  tags: [config]
+
+- name: Déployer la configuration du virtual host
+  ansible.builtin.template:
+    src: novasphere.conf.j2
+    dest: /etc/nginx/sites-available/novasphere.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Redémarrer Nginx
+  tags: [config, nginx]
+
+- name: Activer le virtual host NovaSphere
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/novasphere.conf
+    dest: /etc/nginx/sites-enabled/novasphere.conf
+    state: link
+  notify: Redémarrer Nginx
+  tags: [config, nginx]
+
+- name: Supprimer le virtual host par défaut
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Redémarrer Nginx
+  tags: [config, nginx]
+
+- name: Déployer la page d'accueil NovaSphere
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ nginx_root }}/index.html"
+    owner: www-data
+    group: www-data
+    mode: '0644'
+  tags: [deploy]
+
+- name: Installer les outils de debug
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - strace
+    - tcpdump
+    - net-tools
+  when: env == "dev"
+  tags: [debug]
+
+- name: Créer les utilisateurs applicatifs
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    comment: "{{ item.comment }}"
+    shell: "{{ item.shell }}"
+    create_home: true
+    state: present
+  loop: "{{ app_users }}"
+  tags: [users]

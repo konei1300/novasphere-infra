@@ -31,3 +31,4 @@ packer_cache/
 *.bak
 *.swp
 *~
+.vault_pass

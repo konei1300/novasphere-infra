@@ -60,6 +60,14 @@
       <td>Paquets installés</td>
       <td>{{ packages | join(', ') }}</td>
     </tr>
+    <tr>
+      <td>API Key (masquée)</td>
+      <td>{{ api_key[:8] }}********</td>
+    </tr>
+    <tr>
+      <td>DB configurée</td>
+      <td>Oui ({{ db_password | length }} chars)</td>
+    </tr>
   </table>
 
   <p><em>Page générée par Ansible — ne pas modifier manuellement.</em></p>
