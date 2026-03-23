@@ -61,13 +61,13 @@ resource "aws_security_group" "novasphere_ssh" {
 # --- Instance EC2 ---
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = "t3.micro" # Type économique (amd64)
+  instance_type          = "t3.micro" # Type \Uffffffffnomique (amd64)
   vpc_security_group_ids = [aws_security_group.novasphere_ssh.id]
 
   tags = {
-    Name    = "novasphere-web"
-    Project = "NovaSphere"
-    Session = "S03"
+    Name        = "novasphere-web"
+    Project     = "NovaSphere"
+    Session     = "S03"
     Environment = "dev"
   }
 }
