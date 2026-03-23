@@ -9,16 +9,39 @@
         update_cache: true
         cache_valid_time: 3600
 
-    - name: Installer Nginx
+    - name: Installer les paquets requis
       ansible.builtin.apt:
-        name: nginx
+        name: "{{ item }}"
         state: present
+      loop: "{{ packages }}"
 
-    - name: S'assurer que Nginx est démarré et activé au boot
+    - name: S'assurer que Nginx est démarré et activé
       ansible.builtin.service:
         name: nginx
         state: started
         enabled: true
+
+    - name: Déployer la configuration du virtual host
+      ansible.builtin.template:
+        src: templates/novasphere.conf.j2
+        dest: /etc/nginx/sites-available/novasphere.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Redémarrer Nginx
+
+    - name: Activer le virtual host NovaSphere
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/novasphere.conf
+        dest: /etc/nginx/sites-enabled/novasphere.conf
+        state: link
+      notify: Redémarrer Nginx
+
+    - name: Supprimer le virtual host par défaut
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Redémarrer Nginx
 
     - name: Déployer la page d'accueil NovaSphere
       ansible.builtin.copy:
@@ -246,6 +269,25 @@
         owner: www-data
         group: www-data
         mode: "0644"
+
+    - name: Installer les outils de debug
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - strace
+        - tcpdump
+        - net-tools
+      when: env == "dev"
+
+    - name: Créer les utilisateurs applicatifs
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        comment: "{{ item.comment }}"
+        shell: "{{ item.shell }}"
+        create_home: true
+        state: present
+      loop: "{{ app_users }}"
 
   handlers:
     - name: Redémarrer Nginx

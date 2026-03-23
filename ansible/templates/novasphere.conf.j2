@@ -1,0 +1,15 @@
+server {
+    listen {{ http_port }};
+    server_name {{ nginx_server_name }};
+
+    root {{ nginx_root }};
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    # Header personnalisé pour identifier l'environnement
+    add_header X-Environment "{{ env }}";
+    add_header X-Managed-By "Ansible";
+}

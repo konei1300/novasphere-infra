@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ app_name }} — {{ env }}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>{{ app_name }}</h1>
+
+  <table>
+    <tr>
+      <th>Information</th>
+      <th>Valeur</th>
+    </tr>
+    <tr>
+      <td>Environnement</td>
+      <td>{{ env }}</td>
+    </tr>
+    <tr>
+      <td>Version</td>
+      <td>{{ app_version }}</td>
+    </tr>
+    <tr>
+      <td>Serveur</td>
+      <td>{{ inventory_hostname }}</td>
+    </tr>
+    <tr>
+      <td>IP</td>
+      <td>{{ ansible_host }}</td>
+    </tr>
+    <tr>
+      <td>Paquets installés</td>
+      <td>{{ packages | join(', ') }}</td>
+    </tr>
+  </table>
+
+  <p><em>Page générée par Ansible — ne pas modifier manuellement.</em></p>
+</body>
+</html>
