@@ -55,3 +55,9 @@ variable "ssh_private_key_path" {
   type        = string
   default     = "~/.ssh/novasphere"
 }
+
+variable "custom_ami_id" {
+  description = "ID de l'AMI custom Packer"
+  type        = string
+  default     = ""
+}

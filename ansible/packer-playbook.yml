@@ -1,0 +1,44 @@
+---
+- name: Configuration de l'image NovaSphere
+  hosts: all
+  become: true
+
+  vars:
+    app_name: "NovaSphere"
+    app_version: "2.0"
+    env: "prod"
+    http_port: 80
+    packages:
+      - nginx
+      - curl
+      - htop
+      - tree
+      - jq
+    nginx_server_name: "_"
+    nginx_root: "/var/www/html"
+    api_key: "ns-api-key-packer-demo"
+    db_password: "packer-demo-password"
+
+  tasks:
+    - name: Mettre à jour le cache APT
+      ansible.builtin.apt:
+        update_cache: true
+
+    - name: Installer les paquets requis
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+
+    - name: S'assurer que Nginx est démarré et activé
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Déployer la page d'accueil NovaSphere
+      ansible.builtin.template:
+        src: roles/webserver/templates/index.html.j2
+        dest: "{{ nginx_root }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: "0644"
