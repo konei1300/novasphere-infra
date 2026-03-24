@@ -1,4 +1,3 @@
-# providers.tf — Configuration du provider AWS
 terraform {
   required_providers {
     aws = {

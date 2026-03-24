@@ -1,6 +1,3 @@
-# main.tf — Ressources NovaSphere (paramétré)
-
-# --- Nommage local ---
 locals {
   name_prefix = "${var.project_name}-${var.environment}"
 
@@ -77,4 +74,16 @@ resource "aws_instance" "web" {
   tags = merge(local.common_tags, {
     Name = "${local.name_prefix}-web"
   })
+}
+
+# --- Génération de l'inventaire Ansible ---
+resource "local_file" "ansible_inventory" {
+  content = templatefile("${path.module}/templates/inventory.tftpl", {
+    web_ip   = aws_instance.web.public_ip
+    ssh_user = "ubuntu"
+    ssh_key  = var.ssh_private_key_path
+  })
+
+  filename        = "${path.module}/../../ansible/inventory/hosts_generated.yml"
+  file_permission = "0644"
 }

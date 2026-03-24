@@ -25,7 +25,7 @@
     dest: /etc/nginx/sites-available/novasphere.conf
     owner: root
     group: root
-    mode: '0644'
+    mode: "0644"
   notify: Redémarrer Nginx
   tags: [config, nginx]
 
@@ -50,7 +50,7 @@
     dest: "{{ nginx_root }}/index.html"
     owner: www-data
     group: www-data
-    mode: '0644'
+    mode: "0644"
   tags: [deploy]
 
 - name: Installer les outils de debug

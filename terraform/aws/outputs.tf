@@ -1,5 +1,3 @@
-# outputs.tf — Informations exposées après déploiement
-
 output "instance_id" {
   description = "ID de l'instance EC2"
   value       = aws_instance.web.id
@@ -23,4 +21,9 @@ output "ami_id" {
 output "security_group_id" {
   description = "ID du Security Group"
   value       = aws_security_group.web.id
+}
+
+output "ansible_inventory_path" {
+  description = "Chemin de l'inventaire Ansible généré"
+  value       = local_file.ansible_inventory.filename
 }

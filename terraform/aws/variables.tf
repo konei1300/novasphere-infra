@@ -1,4 +1,3 @@
-# variables.tf — Variables du projet NovaSphere
 variable "aws_region" {
   description = "Région AWS"
   type        = string
@@ -49,4 +48,10 @@ variable "allowed_ssh_cidr" {
   type        = string
   default     = "0.0.0.0/0"
   # Tout le monde (TP uniquement !)
+}
+
+variable "ssh_private_key_path" {
+  description = "Chemin vers la clé privée SSH pour Ansible"
+  type        = string
+  default     = "~/.ssh/novasphere"
 }
